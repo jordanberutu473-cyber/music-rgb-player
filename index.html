@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Galau - RGB</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Latar Belakang Animasi RGB yang Berganti Setiap Saat */
+        body {
+            height: 100vh;
+            /* Warna gradasi RGB */
+            background: linear-gradient(-45deg, #ff2400, #e81d1d, #e8b71d, #1de840, #1ddde8, #2b1de8, #dd1de8);
+            background-size: 400% 400%;
+            animation: gradientRGB 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Keyframes untuk Animasi Pergerakan Warna */
+        @keyframes gradientRGB {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Lingkaran Cahaya Dekoratif - Biru dan Abu-abu */
+        body::before, body::after {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            animation: pulse 8s infinite alternate;
+        }
+
+        body::before {
+            background: rgba(59, 130, 246, 0.4); /* Biru */
+            top: 10%;
+            left: 10%;
+        }
+
+        body::after {
+            background: rgba(149, 149, 149, 0.4); /* Abu-abu */
+            bottom: 10%;
+            right: 10%;
+            animation-delay: -4s;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); opacity: 0.5; }
+            to { transform: scale(1.5); opacity: 0.8; }
+        }
+
+        /* Glassmorphism Container */
+        .player-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 40px;
+            border-radius: 40px;
+            width: 380px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Album Art */
+        .album-wrapper {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 30px;
+        }
+
+        .album-art {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+            transition: 0.5s;
+        }
+
+        .playing .album-art {
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Teks Lagu */
+        .song-info h2 {
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .song-info p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Kontrol Playback Speed & Repeat */
+        .extra-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .speed-btn, .repeat-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .speed-btn:hover, .repeat-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .active-btn {
+            background: #fff !important;
+            color: #000 !important;
+        }
+
+        /* Progress Bar */
+        .progress-area {
+            margin-bottom: 25px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            outline: none;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 0;
+            box-shadow: -400px 0 0 400px #fff;
+        }
+
+        .time-box {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: #fff;
+            font-size: 0.8rem;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Kontrol Utama */
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #play-main {
+            width: 70px;
+            height: 70px;
+            background: #fff;
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            transition: 0.4s;
+        }
+
+        #play-main:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="player-container" id="player">
+        <div class="album-wrapper">
+            <div class="album-art">
+                <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000&auto=format&fit=crop" alt="Album Cover">
+            </div>
+        </div>
+
+        <div class="song-info">
+            <h1 id="title">Aku Kau dan Dia</h1>
+            <center id="artist">Tinky Winky - BAND</center>
+            <p>By: J.Berutu,COM</p> 
+        </div>
+
+        <audio id="main-audio">
+            <source src="lagu.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="extra-controls">
+            <button class="speed-btn" onclick="changeSpeed(0.5, this)">0.5x</button>
+            <button class="speed-btn active-btn" onclick="changeSpeed(1, this)">1x</button>
+            <button class="speed-btn" onclick="changeSpeed(1.5, this)">1.5x</button>
+            <button class="speed-btn" onclick="changeSpeed(2, this)">2x</button>
+            <button class="repeat-btn" id="repeat-btn" onclick="toggleRepeat()">Loop: OFF</button>
+        </div>
+
+        <div class="progress-area">
+            <input type="range" id="progress-bar" value="0" step="0.1">
+            <div class="time-box">
+                <span id="current">0:00</span>
+                <span id="total">0:00</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" onclick="skip(-10)">⏮</button>
+            <button id="play-main" onclick="togglePlay()">▶</button>
+            <button class="control-btn" onclick="skip(10)">⏭</button>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('main-audio');
+        const playBtn = document.getElementById('play-main');
+        const progressBar = document.getElementById('progress-bar');
+        const player = document.getElementById('player');
+        const currentEl = document.getElementById('current');
+        const totalEl = document.getElementById('total');
+        const repeatBtn = document.getElementById('repeat-btn');
+
+        let isRepeat = false;
+
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerHTML = "⏸";
+                player.classList.add('playing');
+            } else {
+                audio.pause();
+                playBtn.innerHTML = "▶";
+                player.classList.remove('playing');
+            }
+        }
+
+        audio.ontimeupdate = () => {
+            if (!isNaN(audio.duration)) {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = percent;
+                currentEl.innerText = formatTime(audio.currentTime);
+            }
+        };
+
+        audio.onended = () => {
+            if (isRepeat) {
+                audio.currentTime = 0;
+                audio.play();
+            } else {
+                playBtn.innerHTML = "▶";
+                player.classList.remove('playing');
+            }
+        };
+
+        audio.onloadedmetadata = () => {
+            totalEl.innerText = formatTime(audio.duration);
+        };
+
+        progressBar.oninput = () => {
+            const seek = (progressBar.value / 100) * audio.duration;
+            audio.currentTime = seek;
+        };
+
+        function skip(time) {
+            audio.currentTime += time;
+        }
+
+        function formatTime(sec) {
+            let m = Math.floor(sec / 60);
+            let s = Math.floor(sec % 60);
+            return `${m}:${s < 10 ? '0' + s : s}`;
+        }
+
+        function changeSpeed(speed, btn) {
+            audio.playbackRate = speed;
+            document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active-btn'));
+            btn.classList.add('active-btn');
+        }
+
+        function toggleRepeat() {
+            isRepeat = !isRepeat;
+            if (isRepeat) {
+                repeatBtn.innerText = "Loop: ON";
+                repeatBtn.classList.add('active-btn');
+            } else {
+                repeatBtn.innerText = "Loop: OFF";
+                repeatBtn.classList.remove('active-btn');
+            }
+        }
+    </script>
+</body>
+</html>
